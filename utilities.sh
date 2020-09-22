@@ -1,6 +1,10 @@
 #!/bin/bash
 # shellcheck disable=SC1090
 
+tw() {
+    terraform workspace select "${1}_$AWS_DEFAULT_REGION"
+}
+
 chup() {
     if [[ -z $1 ]]
     then
