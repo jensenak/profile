@@ -10,6 +10,16 @@
 #umask 022
 
 [ -z "$PS1" ] && return
+logs=true
+log() {
+    if [ $logs = "true" ]
+    then
+        printf "%s - %s\n" "$(date)" "${1:-No message}" >> ~/.zsh.log
+    fi
+}
+
+log "one"
+
 _done() {
     if [[ $1 -eq 0 ]]; then
         printf "[\033[0;32m done \033[0m]\n"
@@ -18,7 +28,7 @@ _done() {
     fi
 }
 
-set -o vi
+# set -o vi
 setopt inc_append_history_time hist_ignore_space prompt_subst
 fpath=(~/.zsh "$fpath")
 
@@ -29,6 +39,9 @@ if [ -z "$BASEPATH" ]
 then
     export BASEPATH="$PATH"
 fi
+
+log "opts and basepath set"
+
 export PATH="$HOME/bin:$BASEPATH:$HOME/go/bin:$HOME/repos/cloud-makefiles/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 export AWS_PROFILE=default
@@ -40,7 +53,6 @@ export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
 export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS=true
-export PERIOD=30
 # shellcheck disable=SC1087,SC2154
 precmd() {
     # From profile.d/git.sh
@@ -63,6 +75,8 @@ export GREP_COLORS='1;33;44'
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:/usr/share/man:/usr/local/share/man:/usr/X11/share/man"
 export shoveDir=/tmp/shove
 
+log "exports done"
+
 [ "$TERM" != "unknown" ] && _done $?
 
  
@@ -71,6 +85,7 @@ export shoveDir=/tmp/shove
 INDENT=$(echo -e "  \xe2\x86\xb3")
 if [ -d ~/profile.d ]; then
     for i in ~/profile.d/*.sh; do
+        log "sourcing $i"
         if [ -r "$i" ]; then
             # shellcheck disable=SC2086
             [ "$TERM" != "unknown" ] && printf "%s %s ... " "$INDENT" "$(basename $i)"
@@ -85,8 +100,9 @@ if [ -d ~/profile.d ]; then
     done
 fi
 
+log "done sourcing"
 tab_random
-
+log "tab set"
 [ "$TERM" != "unknown" ] && printf "\033[0mSetting aliases ..."
 #ALIAS SECTION
 #alias grep='ggrep --color=always'
@@ -119,6 +135,8 @@ alias sv='source_vars'
 alias vv='vi ~/.private'
 alias glog='git log --pretty=oneline -n'
 alias gclean="gitBranchClean"
+log "aliases done"
+
 [ "$TERM" != "unknown" ] && _done $?
 #FUNCTIONS FOR FUN AND AWESOMENESS
 hist() {
@@ -128,3 +146,5 @@ hist() {
 source_vars() {
     source "$HOME/.private/$1.env"
 }
+
+log "done with everything"
