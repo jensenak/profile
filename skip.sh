@@ -4,7 +4,7 @@ skip() {
     RESET="$(tput sgr0)"
 
     #shellcheck disable=SC2206
-    stages=(${(f)"$(find . -name 'conformance_test.go' -maxdepth 2 -exec grep 'RunTestStage' {} \; | cut -d\" -f2)"})
+    stages=(${(f)"$(grep 'RunTestStage' "${SKIP_SOURCE:-tests/conformance_test.go}" | cut -d\" -f2)"})
     case "$1" in
     "")
         i=1
