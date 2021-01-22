@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export hcr=git@github.com:hashicorp
+
 pullall() {
     PWDsave=$PWD
     if [ -n "$1" ]

@@ -30,7 +30,9 @@ _done() {
 
 # set -o vi
 setopt inc_append_history_time hist_ignore_space prompt_subst
-fpath=(~/.zsh "$fpath")
+autoload -Uz compinit && compinit
+# fpath=(~/.zsh "$fpath")
+# zstyle ':completion:*:*:git:*' script ~/.zshrc/.git-completion.zsh
 
 [ "$TERM" != "unknown" ] && printf "Loading env vars ... "
 
@@ -42,7 +44,7 @@ fi
 
 log "opts and basepath set"
 
-export PATH="$HOME/bin:$BASEPATH:$HOME/go/bin:$HOME/repos/cloud-makefiles/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$HOME/bin:$BASEPATH:$HOME/go/bin:$HOME/repos/cloud/makefiles/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 export AWS_PROFILE=default
 export AWS_DEFAULT_REGION=us-east-1
@@ -58,7 +60,7 @@ precmd() {
     # From profile.d/git.sh
     # Remember if you bs :w doesn't work
     #           String before git info       String after git info                                                      Git info fmt
-     __git_ps1 " %B%F{yellow}%K{17}%5d%k%f%b" " $(_show_workspace)|$(_show_doormat_info)|%F{blue}$AWS_DEFAULT_REGION%f %#> " " %s"
+     __git_ps1 " %F{yellow}%K{17}%5d%k%f" " $(_show_workspace)|$(_show_doormat_info)|%F{blue}$AWS_DEFAULT_REGION%f %#> " " %s"
 }
 
 export HISTSIZE=100000
